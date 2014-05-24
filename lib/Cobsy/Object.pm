@@ -1,13 +1,15 @@
 package Cobsy::Object;
 
 use strict;
+use Cobsy::Core::List;
+use Cobsy::Core::Hash;
 
 sub new {
   my $package = shift;
 
   return bless {
-    attributes => Datastructure::Hash->new(),
-    methods    => Datastructure::Hash->new()
+    attributes => Cobsy::Core::Hash->new(),
+    methods    => Cobsy::Core::Hash->new()
   }, $package;
 }
 
@@ -59,4 +61,19 @@ sub clone {
   return $clone;
 }
 
+sub AUTOLOAD {
+  my $name = ($Cobsy::Object::AUTOLOAD =! /Cobsy::Object::(.*?)$/)[0];
+  my ($self, @args) = @_;
+
+  die "Lookup failed for method \"$name\": No component registered \"$name\"" unless $self->{methods}->has($name);
+  return $self->{methods}->get($name)->call(@args);
+}
+
+sub DESTROY {} # keep AUTOLOAD from being called when this object is destroyed
+
 1;
+
+__END__
+
+=head1 NAME
+Cobsy::Object - An object which supports components
