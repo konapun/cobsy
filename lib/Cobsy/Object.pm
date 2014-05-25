@@ -1,16 +1,17 @@
 package Cobsy::Object;
 
 use strict;
-use Cobsy::Core::List;
 use Cobsy::Core::Hash;
+use Cobsy::Object::Methods;
 
 sub new {
   my $package = shift;
 
-  return bless {
-    attributes => Cobsy::Core::Hash->new(),
-    methods    => Cobsy::Core::Hash->new()
+  my $self = bless {
+    attributes => Cobsy::Core::Hash->new()
   }, $package;
+  $self->{methods} = Cobsy::Object::Methods->new($self);
+  return $self;
 }
 
 sub attributes {
@@ -25,11 +26,13 @@ sub extend {
   my ($self, $components) = @_;
 
   my $clone = $self->clone();
-  if (ref($components) eq 'HASH') {
-    $clone = $self->_extendWithHash($clone, $components);
-  }
-  else {
-    $clone = $self->_extendWithComponents($clone, $components);
+  if (!($components eq undef)) {
+    if (ref($components) eq 'HASH') {
+      $clone = $self->_extendWithHash($clone, $components);
+    }
+    else {
+      $clone = $self->_extendWithComponents($clone, $components);
+    }
   }
 
   return $clone;
@@ -41,7 +44,7 @@ sub _extendWithComponents {
   $components = [$components] unless ref($components) eq 'ARRAY';
   foreach my $component (@$components) {
     my $instance = $component->new();
-    $component->install($clone);
+    $instance->install($clone);
   }
   return $clone;
 }
@@ -62,9 +65,9 @@ sub clone {
 }
 
 sub AUTOLOAD {
-  my $name = ($Cobsy::Object::AUTOLOAD =! /Cobsy::Object::(.*?)$/)[0];
+  my $name = ($Cobsy::Object::AUTOLOAD =~ /Cobsy::Object::(.*?)$/)[0];
   my ($self, @args) = @_;
-
+  
   die "Lookup failed for method \"$name\": No component registered \"$name\"" unless $self->{methods}->has($name);
   return $self->{methods}->get($name)->call(@args);
 }

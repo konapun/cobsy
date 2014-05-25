@@ -53,8 +53,8 @@ sub install {
     $require->new()->install($cob);
   }
 
-  my $attributes = $self->exportAttributes();
-  my $methods = $self->exportMethods();
+  my $attributes = Cobsy::Core::Hash->new($self->exportAttributes());
+  my $methods = Cobsy::Core::Hash->new($self->exportMethods());
   $attributes->each(sub {
     my ($key, $val) = @_;
     $cob->attributes->set($key, $val);
