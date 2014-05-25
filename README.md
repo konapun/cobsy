@@ -1,6 +1,6 @@
 ![cobsy](example/cobsy.png)
 
-#A **C**omponent **OB**ject **SY**stem for Perl
+#A Component OBject SYstem for Perl
 
 ---
 Cobsy is a way to build and extend objects at runtime using components, which function like packages. A Cobsy component exports attributes and methods to add to a Cobsy
