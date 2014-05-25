@@ -1,6 +1,6 @@
 ![cobsy](example/cobsy.png)
 
-#A <span style="color: red; font-weight: bold">C</span>omponent <span style="color: red; font-weight: bold">Ob</span>ject <span style="color: red; font-weight: bold">Sy</span>stem for Perl
+#A **C**omponent **OB**ject **SY**stem for Perl
 
 ---
 Cobsy is a way to build and extend objects at runtime using components, which function like packages. A Cobsy component exports attributes and methods to add to a Cobsy
