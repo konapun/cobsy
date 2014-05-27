@@ -51,7 +51,7 @@ sub _extendWithComponents {
 
 sub _extendWithHash {
   my ($self, $clone, $hash) = @_;
-
+  
   die "Extending via hash currently unsupported";
 }
 
@@ -67,7 +67,7 @@ sub clone {
 sub AUTOLOAD {
   my $name = ($Cobsy::Object::AUTOLOAD =~ /Cobsy::Object::(.*?)$/)[0];
   my ($self, @args) = @_;
-  
+
   die "Lookup failed for method \"$name\": No component registered \"$name\"" unless $self->{methods}->has($name);
   return $self->{methods}->get($name)->call(@args);
 }
