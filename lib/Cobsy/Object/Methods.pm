@@ -21,7 +21,7 @@ sub add {
 
 sub set {
   my ($self, $name, $sub) = @_;
-  
+
   my $method = Cobsy::Core::Method->new($self->{owner}, $name, $sub);
   return $self->add($method);
 }
@@ -29,7 +29,7 @@ sub set {
 sub clone {
   my $self = shift;
 
-  my $clone = $self->SUPER::clone();
+  my $clone = bless $self->SUPER::clone(), __PACKAGE__;
   $clone->{owner} = $self->{owner};
   return $clone;
 }

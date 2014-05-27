@@ -24,6 +24,9 @@ my $object2 = $object->extend([
 
 my $greeter = Test::Greeter->new();
 $greeter->install($object2);
+
+print "Callling greet\n";
 $object2->greet();
+print "Greet done\n";
 
 print "Done\n";
