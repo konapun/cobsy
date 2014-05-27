@@ -49,6 +49,7 @@ sub toggle {
 sub install {
   my ($self, $cob) = @_;
 
+  $self->{owner} = $cob;
   foreach my $require (@{$self->requires()}) {
     $require->new()->install($cob);
   }
@@ -62,7 +63,9 @@ sub install {
   $methods->each(sub {
     my ($key, $val) = @_;
     $cob->methods->set($key, $val);
-  })
+  });
+
+  $self->afterInstall($self->{owner});
 }
 
 sub provides {
@@ -95,6 +98,8 @@ sub registersAs {
 
 #          COMPONENTS CAN OVERRIDE METHODS BELOW THIS POINT          #
 sub initialize {}
+
+sub afterInstall {}
 
 sub requires {
   return [];
