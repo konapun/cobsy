@@ -1,7 +1,6 @@
 package Test::Health;
 
 use strict;
-use Test::Setter;
 use base qw(Cobsy::Component);
 
 sub initialize {

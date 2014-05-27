@@ -12,10 +12,34 @@ sub afterInstall {
 
     $owner->methods->set($key, sub {
       print "BEFORE $key\n";
-      return $val->call(@_);
+      my $return = $val->call(@_);
       print "AFTER $key\n";
-    })
+      return $return;
+    });
   });
+}
+
+sub exportAttributes {
+  return {
+    events => {}
+  };
+}
+
+sub exportMethods {
+  my $self = shift;
+
+  return {
+    on => sub {
+      my ($cob, $event, $callback) = @_;
+
+      $self->{events}->{$event} = $callback;
+    },
+    trigger => sub {
+      my ($cob, $event, @args) = @_;
+
+      return $self->{events}->{$event}->(@args);
+    }
+  };
 }
 
 1;

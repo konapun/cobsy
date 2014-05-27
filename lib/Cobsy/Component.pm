@@ -4,12 +4,15 @@ use strict;
 use Cobsy::Core::Hash;
 
 sub new {
+  my $package = shift;
+  my @args = @_;
+
   my $self = bless {
     owner     => undef, # object this component installs into
     isEnabled => 1
-  }, shift;
+  }, $package;
 
-  $self->initialize();
+  $self->initialize(@args);
   return $self;
 }
 
@@ -51,6 +54,7 @@ sub install {
 
   $self->{owner} = $cob;
   foreach my $require (@{$self->requires()}) {
+    eval "require $require";
     $require->new()->install($cob);
   }
 

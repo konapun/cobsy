@@ -3,12 +3,6 @@ package Test::Getter;
 use strict;
 use base qw(Cobsy::Component);
 
-sub exportAttributes {
-  return {
-    name => 'konapun'
-  }
-}
-
 sub exportMethods {
   return {
     get => sub {
