@@ -68,14 +68,6 @@ sub install {
   $self->afterInstall($self->{owner});
 }
 
-sub provides {
-  my $self = shift;
-
-  my $attrs = $self->exportAttributes();
-  my $methods = $self->exportMethods();
-  return $attrs->keys()->merge($methods->keys());
-}
-
 sub clone {
   my $self = shift;
 
