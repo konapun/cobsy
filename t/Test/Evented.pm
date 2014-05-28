@@ -10,10 +10,12 @@ sub afterInstall {
   $owner->methods->each(sub {
     my ($key, $val) = @_;
 
+    return if $key eq 'trigger' || $key eq 'on';
     $owner->methods->set($key, sub {
-      print "BEFORE $key\n";
-      my $return = $val->call(@_);
-      print "AFTER $key\n";
+      my ($cob, @args) = @_;
+
+      my $return = $val->call(@args);
+      $owner->trigger($key, $return);
       return $return;
     });
   });
@@ -32,12 +34,17 @@ sub exportMethods {
     on => sub {
       my ($cob, $event, $callback) = @_;
 
-      $self->{events}->{$event} = $callback;
+      $self->{events}->{$event} = [] unless defined $self->{events}->{$event};
+      push(@{$self->{events}->{$event}}, $callback);
+      return $callback; # so it can be used to unregister (more on this later)
     },
     trigger => sub {
       my ($cob, $event, @args) = @_;
 
-      return $self->{events}->{$event}->(@args);
+      return unless defined $self->{events}->{$event};
+      foreach my $cb (@{$self->{events}->{$event}}) {
+        $cb->(@args);
+      }
     }
   };
 }
