@@ -2,9 +2,17 @@
 
 use strict;
 use lib '../lib';
-
 use Cobsy;
 use Test::Insulter;
+
+my $obj = Cobsy::Object->new([
+  'Test::Evented'
+]);
+
+$obj->on('test', sub {
+  print "Got test!\n";
+});
+$obj->trigger('test');
 
 my $object = Cobsy::Object->new();
 my $insulter = Test::Insulter->new();

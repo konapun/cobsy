@@ -6,11 +6,14 @@ use Cobsy::Object::Methods;
 
 sub new {
   my $package = shift;
+  my $components = shift;
 
   my $self = bless {
     attributes => Cobsy::Core::Hash->new()
   }, $package;
   $self->{methods} = Cobsy::Object::Methods->new($self);
+
+  $self = $self->extend($components) unless $components eq undef;
   return $self;
 }
 
