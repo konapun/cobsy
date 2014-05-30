@@ -80,18 +80,6 @@ sub clone {
   return $clone;
 }
 
-# Override this to set a specific registration name. Else, package will register
-# as the package name, replacing camel case with hyphens
-# (packageName -> package-name)
-sub registersAs {
-  my $self = shift;
-
-  my $componentName = ($self =~ /.+::(.+)$/)[0];
-  my $registrationName = lc $componentName; # TODO: replace camel-case with dash and return
-
-  return $registrationName;
-}
-
 #          COMPONENTS CAN OVERRIDE METHODS BELOW THIS POINT          #
 sub initialize {}
 

@@ -29,9 +29,14 @@ $object2->greet();
 my $object3 = $object2->extend([
   'Test::Health'
 ]);
+$object3->set('name', 'Badguy');
+
 $object3->takeDamage(20);
 print "HP: " . $object3->getHealth() . "\n";
+print "Object3: ";
 $object3->greet();
+print "Object2: ";
+$object2->greet();
 
 my $object4 = $object3->extend({
   'Test::Named' => 'argument',

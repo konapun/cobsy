@@ -41,6 +41,25 @@ sub extend {
   return $clone;
 }
 
+sub clone {
+  my $self = shift;
+
+  my $clone = __PACKAGE__->new();
+  $clone->{attributes} = $self->{attributes}->clone();
+  $clone->{methods} = $self->{methods}->clone();
+  return $clone;
+}
+
+sub AUTOLOAD {
+  my $name = ($Cobsy::Object::AUTOLOAD =~ /Cobsy::Object::(.*?)$/)[0];
+  my ($self, @args) = @_;
+
+  die "Lookup failed for method \"$name\": No component registered \"$name\"" unless $self->{methods}->has($name);
+  return $self->{methods}->get($name)->call(@args);
+}
+
+sub DESTROY {} # keep AUTOLOAD from being called when this object is destroyed
+
 sub _extendWithComponents {
   my ($self, $clone, $components) = @_;
 
@@ -75,25 +94,6 @@ sub _extendWithHash {
 
   die "Extending via hash currently unsupported";
 }
-
-sub clone {
-  my $self = shift;
-
-  my $clone = __PACKAGE__->new();
-  $clone->{attributes} = $self->{attributes}->clone();
-  $clone->{methods} = $self->{methods}->clone();
-  return $clone;
-}
-
-sub AUTOLOAD {
-  my $name = ($Cobsy::Object::AUTOLOAD =~ /Cobsy::Object::(.*?)$/)[0];
-  my ($self, @args) = @_;
-
-  die "Lookup failed for method \"$name\": No component registered \"$name\"" unless $self->{methods}->has($name);
-  return $self->{methods}->get($name)->call(@args);
-}
-
-sub DESTROY {} # keep AUTOLOAD from being called when this object is destroyed
 
 1;
 

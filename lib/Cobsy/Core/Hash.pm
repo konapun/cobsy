@@ -63,7 +63,7 @@ sub merge {
 }
 
 sub clone {
-  return __PACKAGE__->new(shift->{items});
+  return __PACKAGE__->new(shift->{items}); # FIXME: Need to deep copy
 }
 
 sub clear {
