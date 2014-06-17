@@ -1,6 +1,7 @@
 package Cobsy::Core::Hash;
 
 use strict;
+use Clone;
 
 sub new {
 	my $package = shift;
@@ -63,6 +64,7 @@ sub merge {
 }
 
 sub clone {
+	#return __PACKAGE__->new(Clone::clone(shift->{items}));
   return __PACKAGE__->new(shift->{items}); # FIXME: Need to deep copy
 }
 
