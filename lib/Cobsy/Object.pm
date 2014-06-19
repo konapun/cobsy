@@ -51,7 +51,7 @@ sub clone {
 }
 
 sub AUTOLOAD {
-  my $name = ($Cobsy::Object::AUTOLOAD =~ /Cobsy::Object::(.*?)$/)[0];
+  my $name = ($Cobsy::Object::AUTOLOAD =~ /[a-zA-Z]+::[a-zA-Z]+::(.*?)$/)[0];
   my ($self, @args) = @_;
 
   die "Lookup failed for method \"$name\": No component registered \"$name\"" unless $self->{methods}->has($name);
