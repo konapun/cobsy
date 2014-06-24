@@ -27,10 +27,10 @@ sub set {
 }
 
 sub clone {
-  my $self = shift;
+  my ($self, $owner) = @_; # need owner so we know which cob to pass to the callback
 
-  my $clone = bless $self->SUPER::clone(), __PACKAGE__;
-  $clone->{owner} = $self->{owner};
+  my $clone = bless $self->SUPER::clone(1), __PACKAGE__; # get a deep clone of this object
+  $clone->{owner} = $owner || $self->{owner};
   return $clone;
 }
 

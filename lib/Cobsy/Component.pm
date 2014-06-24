@@ -55,6 +55,7 @@ sub install {
   $self->{owner} = $cob;
   foreach my $require (@{$self->requires()}) {
     eval "require $require";
+    
     $require->new()->install($cob);
   }
 

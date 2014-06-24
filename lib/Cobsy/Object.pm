@@ -45,8 +45,8 @@ sub clone {
   my $self = shift;
 
   my $clone = __PACKAGE__->new();
-  $clone->{attributes} = $self->{attributes}->clone();
-  $clone->{methods} = $self->{methods}->clone();
+  $clone->{attributes} = $self->{attributes}->clone(1);
+  $clone->{methods} = $self->{methods}->clone($clone);
   return $clone;
 }
 

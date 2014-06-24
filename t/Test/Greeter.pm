@@ -14,7 +14,7 @@ sub exportMethods {
   return {
     greet => sub {
       my $cob = shift;
-
+      
       print "Hello, from " . $cob->get('name') . "!\n";
     }
   };

@@ -5,7 +5,7 @@ use Clone;
 
 sub new {
 	my $package = shift;
-	my $items = shift; # a hash
+	my $items = shift; # a hashref
 
 	return bless {
 		items => $items || {},
@@ -64,13 +64,15 @@ sub merge {
 }
 
 sub clone {
-	#return __PACKAGE__->new(Clone::clone(shift->{items}));
-  return __PACKAGE__->new(shift->{items}); # FIXME: Need to deep copy
+	my ($self, $deep) = @_;
+	$deep = 0 unless defined $deep; # shallow copy by default
+
+	my $items = $deep ? Clone::clone($self->{items}) : {%{$self->{items}}};
+	return __PACKAGE__->new($items);
 }
 
 sub clear {
-	shift->{items} = {};
-}
+	shift->{items} = {};}
 
 sub each {
   my ($self, $cb) = @_;
