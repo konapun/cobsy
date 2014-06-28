@@ -44,10 +44,11 @@ sub extend {
 sub clone {
   my $self = shift;
 
+  my $callerClass = ref $self;
   my $clone = __PACKAGE__->new();
   $clone->{attributes} = $self->{attributes}->clone(1);
   $clone->{methods} = $self->{methods}->clone($clone);
-  return $clone;
+  return bless $clone, $callerClass; # Rebless into calling class in order to allow Object subclassing 
 }
 
 sub AUTOLOAD {
