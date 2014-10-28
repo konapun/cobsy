@@ -81,14 +81,12 @@ sub clone {
   return $clone;
 }
 
-sub getObject {
-  return shift->{owner};
-}
-
 #          COMPONENTS CAN OVERRIDE METHODS BELOW THIS POINT          #
 sub initialize {}
 
-sub afterInstall {}
+sub afterInstall {
+  my ($self, $cob) = @_;
+}
 
 sub requires {
   return [];
