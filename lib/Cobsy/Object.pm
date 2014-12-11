@@ -1,6 +1,7 @@
 package Cobsy::Object;
 
 use strict;
+use Carp;
 use Cobsy::Core::Hash;
 use Cobsy::Object::Methods;
 
@@ -48,14 +49,14 @@ sub clone {
   my $clone = __PACKAGE__->new();
   $clone->{attributes} = $self->{attributes}->clone(1);
   $clone->{methods} = $self->{methods}->clone($clone);
-  return bless $clone, $callerClass; # Rebless into calling class in order to allow Object subclassing 
+  return bless $clone, $callerClass; # Rebless into calling class in order to allow Object subclassing
 }
 
 sub AUTOLOAD {
   my $name = ($Cobsy::Object::AUTOLOAD =~ /[a-zA-Z]+::[a-zA-Z]+::(.*?)$/)[0];
   my ($self, @args) = @_;
 
-  die "Lookup failed for method \"$name\": No component registered \"$name\"" unless $self->{methods}->has($name);
+  confess "Lookup failed for method \"$name\": No component registered \"$name\"" unless $self->{methods}->has($name);
   return $self->{methods}->get($name)->call(@args);
 }
 

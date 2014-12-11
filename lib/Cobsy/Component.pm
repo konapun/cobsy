@@ -9,43 +9,10 @@ sub new {
 
   my $self = bless {
     owner     => undef, # object this component installs into
-    isEnabled => 1
   }, $package;
 
   $self->initialize(@args);
   return $self;
-}
-
-sub isEnabled {
-  return shift->{isEnabled};
-}
-
-sub disable {
-  my $self = shift;
-
-  return unless $self->isEnabled();
-  my $owner = $self->{owner};
-  if ($owner) {
-    # TODO: Unregister attributes and methods from this
-  }
-  $self->{isEnabled} = 0;
-}
-
-sub enable {
-  my $self = shift;
-
-  return if $self->isEnabled();
-  my $owner = $self->{owner};
-  if ($owner) {
-    # TODO: Re-register attributes
-  }
-  $self->{isEnabled} = 1;
-}
-
-sub toggle {
-  my $self = shift;
-
-  $self->isEnabled() ? $self->disable() : $self->enable();
 }
 
 # Installs this component into a Cobsy::Object
@@ -55,7 +22,7 @@ sub install {
   $self->{owner} = $cob;
   foreach my $require (@{$self->requires()}) {
     eval "require $require";
-    
+
     $require->new()->install($cob);
   }
 
@@ -77,7 +44,6 @@ sub clone {
   my $self = shift;
 
   my $clone = __PACKAGE__->new();
-  $clone->disable() unless $self->isEnabled();
   return $clone;
 }
 
