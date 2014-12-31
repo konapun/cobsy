@@ -20,10 +20,13 @@ sub install {
   my ($self, $cob) = @_;
 
   $self->{owner} = $cob;
-  foreach my $require (@{$self->requires()}) {
-    eval "require $require";
-
-    $require->new()->install($cob);
+  my $reqs = $self->requires();
+  my $reqType = ref $reqs;
+  if ($reqType eq 'HASH') {
+    $self->_initRequirementsWithArgs($reqs, $cob);
+  }
+  else {
+    $self->_initRequirements($reqs, $cob);
   }
 
   my $attributes = Cobsy::Core::Hash->new($self->exportAttributes());
@@ -64,6 +67,24 @@ sub exportAttributes {
 
 sub exportMethods {
   return {};
+}
+
+sub _initRequirements {
+  my ($self, $reqs, $cob) = @_;
+
+  foreach my $component (@$reqs) {
+    eval "require $component";
+    $component->new()->install($cob);
+  }
+}
+
+sub _initRequirementsWithArgs {
+  my ($self, $reqs, $cob) = @_;
+
+  while (my ($component, $args) = each %$reqs) {
+    eval "require $component";
+    $component->new($args)->install($cob);
+  }
 }
 
 1;
