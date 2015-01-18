@@ -51,20 +51,33 @@ sub clone {
 }
 
 #          COMPONENTS CAN OVERRIDE METHODS BELOW THIS POINT          #
+
+# Code to run once this component is created
 sub initialize {}
 
+# Code to run after this component is installed into the cob
 sub afterInstall {
   my ($self, $cob) = @_;
 }
 
+# A list of components required by this component. Can also return a hash which
+# initializes components with hash values
 sub requires {
   return [];
 }
 
+# Priority in which this component should be loaded during a `require` or when
+# loading into a cob. A higher number indicates a higher priority
+sub setPriority {
+  return 1; # lowest priority by default
+}
+
+# Attributes to be exported into the cob to be installed into
 sub exportAttributes {
   return {};
 }
 
+# Methods to be exported into the cob to be installed into
 sub exportMethods {
   return {};
 }

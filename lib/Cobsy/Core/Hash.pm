@@ -72,7 +72,8 @@ sub clone {
 }
 
 sub clear {
-	shift->{items} = {};}
+	shift->{items} = {};
+}
 
 sub each {
   my ($self, $cb) = @_;
@@ -83,7 +84,7 @@ sub each {
 }
 
 sub toNative {
-  return shift->{items};
+  return %{shift->{items}};
 }
 
 # Allow block setting
@@ -94,6 +95,13 @@ sub configure {
 		$self->set($key, $val);
 	}
 }
+
+#sub sort(&@){
+#	my $self = shift;
+#	my $block = \&{shift @_};
+#
+#
+#}
 
 1;
 
