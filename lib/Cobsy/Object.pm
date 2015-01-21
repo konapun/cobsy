@@ -79,7 +79,7 @@ sub _extendWithComponentArguments {
   my ($self, $clone, $componentsHash) = @_;
 
   my $hash = Cobsy::Core::Hash->new($componentsHash);
-  #$hash->sort(Cobsy::Core::Hash::SUB, 'setPriority')->each(sub { # TODO
+#  $hash->sort(sub { $a->setPriority() < $b->setPriority() })->each(sub { # Load components by priority
   $hash->each(sub {
     my ($component, $args) = @_;
 

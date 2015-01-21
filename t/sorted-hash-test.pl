@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use lib '../lib';
+use Test::Hash;
 use Cobsy::Core::Hash::Ordered;
 
 my $orderedHash = Cobsy::Core::Hash::Ordered->new();
@@ -37,3 +38,5 @@ print "$_\n" foreach $clone->values();
 print "\n";
 print "$_\n" foreach $orderedHash->values();
 print "\n";
+
+my $sorted = $orderedHash->sort(sub { print "Got $a and $b\n" });
