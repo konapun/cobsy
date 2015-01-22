@@ -15,4 +15,5 @@ my $test2 = Cobsy::Object->new([
 ]);
 
 $test->doThing();
+print "\n";
 $test2->doThing();

@@ -65,29 +65,35 @@ sub DESTROY {} # keep AUTOLOAD from being called when this object is destroyed
 sub _extendWithComponents {
   my ($self, $clone, $components) = @_;
 
+  my @instantiatedComponents;
   $components = [$components] unless ref($components) eq 'ARRAY';
   foreach my $component (@$components) {
     eval "require $component";
 
     my $instance = $component->new();
-    $instance->install($clone);
+    push(@instantiatedComponents, $instance);
   }
+
+  my @orderedComponents = sort { $a->setPriority() > $b->setPriority() } @instantiatedComponents;
+  $_->install($clone) foreach @orderedComponents;
   return $clone;
 }
 
 sub _extendWithComponentArguments {
   my ($self, $clone, $componentsHash) = @_;
 
-  my $hash = Cobsy::Core::Hash->new($componentsHash);
-#  $hash->sort(sub { $a->setPriority() < $b->setPriority() })->each(sub { # Load components by priority
-  $hash->each(sub {
+  my @instantiatedComponents;
+  Cobsy::Core::Hash->new($componentsHash)->each(sub {
     my ($component, $args) = @_;
 
     eval "require $component";
     $args = [$args] unless ref($args) eq 'ARRAY'; # make sure args is an array
     my $instance = $component->new(@$args);
-    $instance->install($clone);
+    push(@instantiatedComponents, $instance);
   });
+
+  my @orderedComponents = sort { $a->setPriority() > $b->setPriority() } @instantiatedComponents;
+  $_->install($clone) foreach @orderedComponents;
   return $clone;
 }
 

@@ -39,4 +39,16 @@ print "\n";
 print "$_\n" foreach $orderedHash->values();
 print "\n";
 
-my $sorted = $orderedHash->sort(sub { print "Got $a and $b\n" });
+#my $sorted = $orderedHash->sort(sub { print "Got $a and $b\n" });
+
+$clone->each(sub {
+  my ($key, $val) = @_;
+
+  $clone->set($key, "$val-updated");
+});
+
+$clone->each(sub {
+  my ($key, $val) = @_;
+
+  print "($key, $val)\n";
+})

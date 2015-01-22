@@ -4,7 +4,7 @@ use strict;
 use base qw(Cobsy::Component);
 
 sub setPriority {
-  return 2;
+  return 1;
 }
 
 sub exportMethods {

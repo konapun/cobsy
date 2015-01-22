@@ -2,7 +2,6 @@ package Cobsy::Core::Hash;
 
 use strict;
 use Clone;
-use Cobsy::Core::Hash::Ordered;
 
 sub new {
 	my $package = shift;
@@ -95,18 +94,6 @@ sub configure {
 	while (my ($key, $val) = each(%$hashref)) {
 		$self->set($key, $val);
 	}
-}
-
-sub sort {
-	my ($self, $compareCb) = @_;
-use Data::Dumper;
-print Dumper($self->{items});
-	no strict 'refs';
-	local *{caller.'::a'} = *a;
-	local *{caller.'::b'} = *b;
-
-	my @sortedVals = sort $compareCb $self->values();
-	# TODO
 }
 
 1;

@@ -8,7 +8,7 @@ sub new {
   my @args = @_;
 
   my $self = bless {
-    owner     => undef, # object this component installs into
+    owner => undef, # object this component installs into
   }, $package;
 
   $self->initialize(@args);
@@ -85,19 +85,30 @@ sub exportMethods {
 sub _initRequirements {
   my ($self, $reqs, $cob) = @_;
 
+  my @components;
   foreach my $component (@$reqs) {
     eval "require $component";
-    $component->new()->install($cob);
+
+    push(@components, $component->new());
   }
+
+  my @orderedComponents = sort { $a->setPriority() > $b->setPriority() } @components;
+  $_->install($cob) foreach @components;
 }
 
 sub _initRequirementsWithArgs {
   my ($self, $reqs, $cob) = @_;
 
+  my @components;
   while (my ($component, $args) = each %$reqs) {
     eval "require $component";
-    $component->new($args)->install($cob);
+
+    $args = [$args] unless ref($args) eq 'ARRAY'; # make sure args is an array
+    push(@components, $component->new($args));
   }
+
+  my @orderedComponents = sort { $a->setPriority() > $b->setPriority() } @components;
+  $_->install($cob) foreach @components;
 }
 
 1;
