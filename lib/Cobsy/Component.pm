@@ -92,7 +92,7 @@ sub _initRequirements {
     push(@components, $component->new());
   }
 
-  my @orderedComponents = sort { $a->setPriority() > $b->setPriority() } @components;
+  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @components;
   $_->install($cob) foreach @components;
 }
 
@@ -107,7 +107,7 @@ sub _initRequirementsWithArgs {
     push(@components, $component->new($args));
   }
 
-  my @orderedComponents = sort { $a->setPriority() > $b->setPriority() } @components;
+  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @components;
   $_->install($cob) foreach @components;
 }
 

@@ -74,7 +74,7 @@ sub _extendWithComponents {
     push(@instantiatedComponents, $instance);
   }
 
-  my @orderedComponents = sort { $a->setPriority() > $b->setPriority() } @instantiatedComponents;
+  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @instantiatedComponents;
   $_->install($clone) foreach @orderedComponents;
   return $clone;
 }
@@ -92,7 +92,7 @@ sub _extendWithComponentArguments {
     push(@instantiatedComponents, $instance);
   });
 
-  my @orderedComponents = sort { $a->setPriority() > $b->setPriority() } @instantiatedComponents;
+  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @instantiatedComponents;
   $_->install($clone) foreach @orderedComponents;
   return $clone;
 }
