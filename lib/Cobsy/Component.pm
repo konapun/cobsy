@@ -2,13 +2,15 @@ package Cobsy::Component;
 
 use strict;
 use Cobsy::Core::Hash;
+use Cobsy::Core::Loader;
 
 sub new {
   my $package = shift;
   my @args = @_;
 
   my $self = bless {
-    owner => undef, # object this component installs into
+    owner  => undef, # object this component installs into
+    loader => Cobsy::Core::Loader->new()
   }, $package;
 
   $self->initialize(@args);
@@ -21,13 +23,7 @@ sub install {
 
   $self->{owner} = $cob;
   my $reqs = $self->requires();
-  my $reqType = ref $reqs;
-  if ($reqType eq 'HASH') {
-    $self->_initRequirementsWithArgs($reqs, $cob);
-  }
-  else {
-    $self->_initRequirements($reqs, $cob);
-  }
+  $self->{loader}->load($cob, $reqs);
 
   my $attributes = Cobsy::Core::Hash->new($self->exportAttributes());
   my $methods = Cobsy::Core::Hash->new($self->exportMethods());
@@ -80,35 +76,6 @@ sub exportAttributes {
 # Methods to be exported into the cob to be installed into
 sub exportMethods {
   return {};
-}
-
-sub _initRequirements {
-  my ($self, $reqs, $cob) = @_;
-
-  my @components;
-  foreach my $component (@$reqs) {
-    eval "require $component";
-
-    push(@components, $component->new());
-  }
-
-  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @components;
-  $_->install($cob) foreach @components;
-}
-
-sub _initRequirementsWithArgs {
-  my ($self, $reqs, $cob) = @_;
-
-  my @components;
-  while (my ($component, $args) = each %$reqs) {
-    eval "require $component";
-
-    $args = [$args] unless ref($args) eq 'ARRAY'; # make sure args is an array
-    push(@components, $component->new($args));
-  }
-
-  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @components;
-  $_->install($cob) foreach @components;
 }
 
 1;
