@@ -25,6 +25,8 @@ sub install {
   my $reqs = $self->requires();
   $self->{loader}->load($cob, $reqs);
 
+  $self->beforeInstall($self->{owner});
+
   my $attributes = Cobsy::Core::Hash->new($self->exportAttributes());
   my $methods = Cobsy::Core::Hash->new($self->exportMethods());
   $attributes->each(sub {
@@ -50,6 +52,11 @@ sub clone {
 
 # Code to run once this component is created
 sub initialize {}
+
+# Code to run before this component is sintalled into the cob
+sub beforeInstall {
+  my ($self, $cob) = @_;
+}
 
 # Code to run after this component is installed into the cob
 sub afterInstall {
