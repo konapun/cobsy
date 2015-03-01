@@ -1,0 +1,9 @@
+Makefile.PL
+MANIFEST
+lib/Cobsy.pm
+lib/Cobsy/Object.pm
+lib/Cobsy/Component.pm
+lib/Cobsy/Core/Hash.pm
+lib/Cobsy/Core/Loader.pm
+lib/Cobsy/Core/Method.pm
+lib/Cobsy/Object/Methods.pm

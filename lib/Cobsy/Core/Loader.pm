@@ -37,7 +37,7 @@ sub _loadComponentHash {
   });
 
   my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @instantiatedComponents;
-  $_->install($clone) foreach @orderedComponents;
+  $clone->installComponent($_) foreach @orderedComponents;
   return $clone;
 }
 
@@ -54,7 +54,7 @@ sub _loadComponentList {
   }
 
   my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @instantiatedComponents;
-  $_->install($clone) foreach @orderedComponents;
+  $clone->installComponent($_) foreach @orderedComponents;
   return $clone;
 }
 

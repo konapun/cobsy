@@ -28,6 +28,28 @@ sub methods {
   return shift->{methods};
 }
 
+sub installComponent {
+  my ($self, $component) = @_;
+
+  my $reqs = $component->requires();
+  $self->{loader}->load($self, $reqs);
+  $component->beforeInstall($self);
+
+  my $attributes = Cobsy::Core::Hash->new($component->exportAttributes());
+  my $methods = Cobsy::Core::Hash->new($component->exportMethods());
+  $attributes->each(sub {
+    my ($key, $val) = @_;
+    $self->attributes->set($key, $val);
+  });
+  $methods->each(sub {
+    my ($key, $val) = @_;
+    $self->methods->set($key, $val);
+  });
+
+  $component->afterInstall($self);
+  return $self;
+}
+
 sub extend {
   my ($self, $components) = @_;
 
@@ -46,6 +68,7 @@ sub clone {
   my $clone = __PACKAGE__->new();
   $clone->{attributes} = $self->{attributes}->clone(1);
   $clone->{methods} = $self->{methods}->clone($clone);
+  # TODO: Need to clone components too, but the object has no knowledge of them
   return bless $clone, $callerClass; # Rebless into calling class in order to allow Object subclassing
 }
 

@@ -2,43 +2,15 @@ package Cobsy::Component;
 
 use strict;
 use Cobsy::Core::Hash;
-use Cobsy::Core::Loader;
 
 sub new {
   my $package = shift;
   my @args = @_;
 
-  my $self = bless {
-    owner  => undef, # object this component installs into
-    loader => Cobsy::Core::Loader->new()
-  }, $package;
+  my $self = bless {}, $package;
 
   $self->initialize(@args);
   return $self;
-}
-
-# Installs this component into a Cobsy::Object
-sub install {
-  my ($self, $cob) = @_;
-
-  $self->{owner} = $cob;
-  my $reqs = $self->requires();
-  $self->{loader}->load($cob, $reqs);
-
-  $self->beforeInstall($self->{owner});
-
-  my $attributes = Cobsy::Core::Hash->new($self->exportAttributes());
-  my $methods = Cobsy::Core::Hash->new($self->exportMethods());
-  $attributes->each(sub {
-    my ($key, $val) = @_;
-    $cob->attributes->set($key, $val);
-  });
-  $methods->each(sub {
-    my ($key, $val) = @_;
-    $cob->methods->set($key, $val);
-  });
-
-  $self->afterInstall($self->{owner});
 }
 
 sub clone {

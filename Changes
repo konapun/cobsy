@@ -1,0 +1,2 @@
+0.2.0 3/1/14
+- changed $component->install($cob) to $cob->installComponent($component) so clones can be handled properly
