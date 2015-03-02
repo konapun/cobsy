@@ -11,6 +11,7 @@ sub new {
   my $components = shift;
 
   my $self = bless {
+    components => [],
     attributes => Cobsy::Core::Hash->new(),
     loader     => Cobsy::Core::Loader->new()
   }, $package;
@@ -34,7 +35,7 @@ sub installComponent {
   my $reqs = $component->requires();
   $self->{loader}->load($self, $reqs);
   $component->beforeInstall($self);
-
+  
   my $attributes = Cobsy::Core::Hash->new($component->exportAttributes());
   my $methods = Cobsy::Core::Hash->new($component->exportMethods());
   $attributes->each(sub {
@@ -47,6 +48,7 @@ sub installComponent {
   });
 
   $component->afterInstall($self);
+  push(@{$self->{components}}, $component);
   return $self;
 }
 
@@ -66,9 +68,14 @@ sub clone {
 
   my $callerClass = ref $self;
   my $clone = __PACKAGE__->new();
-  $clone->{attributes} = $self->{attributes}->clone(1);
-  $clone->{methods} = $self->{methods}->clone($clone);
-  # TODO: Need to clone components too, but the object has no knowledge of them
+#  $clone->{attributes} = $self->{attributes}->clone(1);
+#  $clone->{methods} = $self->{methods}->clone($clone);
+  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @{$self->{components}};
+  foreach my $component (@orderedComponents) {
+    my $cc = $component->clone();
+    $clone->installComponent($cc);
+  }
+
   return bless $clone, $callerClass; # Rebless into calling class in order to allow Object subclassing
 }
 

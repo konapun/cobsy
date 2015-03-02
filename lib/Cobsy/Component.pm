@@ -7,7 +7,9 @@ sub new {
   my $package = shift;
   my @args = @_;
 
-  my $self = bless {}, $package;
+  my $self = bless {
+    args => [@args]
+  }, $package;
 
   $self->initialize(@args);
   return $self;
@@ -16,7 +18,8 @@ sub new {
 sub clone {
   my $self = shift;
 
-  my $clone = __PACKAGE__->new();
+  my $ref = ref $self;
+  my $clone = $ref->new(@{$self->{args}});
   return $clone;
 }
 
