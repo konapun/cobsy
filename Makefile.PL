@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use ExtUtils::MakeMaker;
+use ExtUtils::MakeMaker 6.64;
 
 WriteMakefile(
   NAME => 'Cobsy',
@@ -19,6 +19,10 @@ WriteMakefile(
     }
   },
   PREREQ_PM => {
-    # TODO
+    # none
+  },
+  TEST_REQUIRES => {
+    'Test::More' => 1.001014
+    'Test::BDD::Cucumber' => 0.34
   }
 );
