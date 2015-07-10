@@ -14,4 +14,5 @@ Feature: Cobsy object extension by components
     Then I should get an object which is a clone of the object being extended with the additional components loaded
     And The resulting extended component should ignore duplicates
     But Duplicate components should be reinitialized with their hash values
+    And Duplicate components not passed explicit initializers should be reinitialized with their previous values
     

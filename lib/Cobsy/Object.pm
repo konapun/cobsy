@@ -11,7 +11,7 @@ sub new {
   my $components = shift;
 
   my $self = bless {
-    components => [],
+    components => {}, # each key is the component ref to prevent duplicates from being installed
     attributes => Cobsy::Core::Hash->new(),
     loader     => Cobsy::Core::Loader->new()
   }, $package;
@@ -35,7 +35,7 @@ sub installComponent {
   my $reqs = $component->requires();
   $self->{loader}->load($self, $reqs);
   $component->beforeInstall($self);
-  
+
   my $attributes = Cobsy::Core::Hash->new($component->exportAttributes());
   my $methods = Cobsy::Core::Hash->new($component->exportMethods());
   $attributes->each(sub {
@@ -48,7 +48,7 @@ sub installComponent {
   });
 
   $component->afterInstall($self);
-  push(@{$self->{components}}, $component);
+  $self->{components}->{ref $component} = $component;
   return $self;
 }
 
@@ -59,7 +59,7 @@ sub extend {
   if (!($components eq undef)) {
     $self->{loader}->load($clone, $components);
   }
-
+  
   return $clone;
 }
 
@@ -68,9 +68,7 @@ sub clone {
 
   my $callerClass = ref $self;
   my $clone = __PACKAGE__->new();
-#  $clone->{attributes} = $self->{attributes}->clone(1);
-#  $clone->{methods} = $self->{methods}->clone($clone);
-  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } @{$self->{components}};
+  my @orderedComponents = sort { $a->setPriority() <=> $b->setPriority() } values %{$self->{components}};
   foreach my $component (@orderedComponents) {
     my $cc = $component->clone();
     $clone->installComponent($cc);
@@ -88,6 +86,16 @@ sub AUTOLOAD {
 }
 
 sub DESTROY {} # keep AUTOLOAD from being called when this object is destroyed
+
+sub _installComponent {
+  my ($self, $component) = @_;
+
+}
+
+sub _reinitializeComponent {
+  my ($self, $component) = @_;
+
+}
 
 1;
 

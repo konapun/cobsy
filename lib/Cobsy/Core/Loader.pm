@@ -5,7 +5,9 @@ use strict;
 sub new {
   my $package = shift;
 
-  return bless {}, $package;
+  return bless {
+    initializers => {} # load process should be repeatable
+  }, $package;
 }
 
 sub load {
@@ -21,6 +23,11 @@ sub load {
   }
 
   return $clone;
+}
+
+sub reload {
+  my ($self, $clone, $components) = @_;
+
 }
 
 sub _loadComponentHash {
