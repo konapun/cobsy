@@ -2,6 +2,7 @@ package Cobsy::Core::Hash;
 
 use strict;
 use Clone;
+use Carp;
 
 sub new {
 	my $package = shift;
@@ -27,7 +28,7 @@ sub set {
 sub get {
 	my ($self, $key) = @_;
 
-	die "No such key \"$key\"" unless $self->has($key);
+	confess "No such key \"$key\"" unless $self->has($key);
 	return $self->{items}->{$key};
 }
 
@@ -46,7 +47,7 @@ sub values {
 sub remove {
 	my ($self, $key) = @_;
 
-	die "No such key \"$key\"" unless $self->has($key);
+	confess "No such key \"$key\"" unless $self->has($key);
 	return delete $self->{items}->{$key};
 }
 
