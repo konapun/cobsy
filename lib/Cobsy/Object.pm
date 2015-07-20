@@ -59,7 +59,7 @@ sub extend {
   if (!($components eq undef)) {
     $self->{loader}->load($clone, $components);
   }
-  
+
   return $clone;
 }
 
@@ -86,16 +86,6 @@ sub AUTOLOAD {
 }
 
 sub DESTROY {} # keep AUTOLOAD from being called when this object is destroyed
-
-sub _installComponent {
-  my ($self, $component) = @_;
-
-}
-
-sub _reinitializeComponent {
-  my ($self, $component) = @_;
-
-}
 
 1;
 

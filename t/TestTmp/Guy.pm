@@ -10,4 +10,11 @@ sub requires {
   }
 }
 
+sub iniitialize {
+  my ($self, $name, $age) = @_;
+
+  $self->setDefault('name', $name);
+  $self->setDefault('age', $age);
+}
+
 1;
