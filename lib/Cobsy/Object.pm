@@ -29,6 +29,10 @@ sub methods {
   return shift->{methods};
 }
 
+sub components {
+  return keys %{$self->{components}};
+}
+
 sub installComponent {
   my ($self, $component) = @_;
 
