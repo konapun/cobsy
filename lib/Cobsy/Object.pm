@@ -30,7 +30,7 @@ sub methods {
 }
 
 sub components {
-  return keys %{$self->{components}};
+  return keys %{shift->{components}};
 }
 
 sub installComponent {
