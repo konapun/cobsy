@@ -38,7 +38,7 @@ sub installComponent {
 
   my $reqs = $component->requires();
   $self->{loader}->load($self, $reqs);
-  $component->beforeInstall($self);
+  $component->configure($self);
 
   my $attributes = Cobsy::Core::Hash->new($component->exportAttributes());
   my $methods = Cobsy::Core::Hash->new($component->exportMethods());
@@ -51,7 +51,7 @@ sub installComponent {
     $self->methods->set($key, $val);
   });
 
-  $component->afterInstall($self);
+  $component->finalize($self);
   $self->{components}->{ref $component} = $component;
   return $self;
 }

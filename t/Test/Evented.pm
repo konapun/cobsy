@@ -3,7 +3,7 @@ package Test::Evented;
 use strict;
 use base qw(Cobsy::Component);
 
-sub afterInstall {
+sub finalize {
   my ($self, $owner) = @_;
 
   # Need to make sure this doesn't alter the "base" object...

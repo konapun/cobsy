@@ -29,12 +29,12 @@ sub clone {
 sub initialize {}
 
 # Code to run before this component is sintalled into the cob
-sub beforeInstall {
+sub configure {
   my ($self, $cob) = @_;
 }
 
 # Code to run after this component is installed into the cob
-sub afterInstall {
+sub finalize {
   my ($self, $cob) = @_;
 }
 

@@ -14,7 +14,7 @@ A component is a "runtime package" which provides attributes and methods which a
 Define code to be run when the component is instantiated. Arguments (in the form of an array ref) can also be passed to the component. Initialize is mainly used to setup private
 data associated with the component
 
-### `afterInstall(cob)`
+### `finalize(cob)`
 Define code to run immediately after this component is installed into a Cob
 
 ### `requires()`
